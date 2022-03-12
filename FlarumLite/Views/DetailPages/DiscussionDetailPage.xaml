@@ -1,0 +1,189 @@
+﻿<Page
+    x:Class="FlarumLite.Views.DetailPages.DiscussionDetailPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:FlarumLite.Views"
+    xmlns:models="using:FlarumLite.core.Models"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:appstudio="using:AppStudio.Uwp.Controls"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls" 
+    xmlns:converter="using:FlarumLite.Helpers.ValueConverters"
+    Loaded="Page_Loaded"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converter:NullVisibilityConverter x:Key="NullVisibilityConverter"/>
+        <converter:DateConverter x:Key="DateConverter"/>
+
+        <DataTemplate x:DataType="models:Included" x:Key="DiscussionDetailsTemlpate">
+            <Border BorderThickness="0,0,0,0.5" Margin="8,0,8,0" BorderBrush="#4D808080" HorizontalAlignment="Stretch">
+                <Grid Margin="{StaticResource MediumBottomMargin}" >
+                    <!--头像区-->
+                    <StackPanel Margin="{StaticResource MediumTopBottomMargin}" HorizontalAlignment="Stretch">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                            <Ellipse Width="40" Height="40" HorizontalAlignment="Left" Margin="{StaticResource SmallTopMargin}">
+                                <Ellipse.Fill>
+                                    <ImageBrush ImageSource="{x:Bind attributes.user.avatarUrl}" />
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="12,5,0,-3" >
+                                    <HyperlinkButton x:Name="UserButton" Content="{x:Bind attributes.user.displayName,Mode=OneWay}" Style="{StaticResource TextBlockButtonStyle}" Click="UserButton_Click" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{x:Bind attributes.number}" Margin="{StaticResource SmallLeftMargin}" Style="{StaticResource DetailBodyBaseMediumStyle}"/>
+                                    <TextBlock Text="楼" Style="{StaticResource DetailBodyBaseMediumStyle}"/>
+
+                                    <TextBlock Text="{x:Bind attributes.createdAt,Converter={StaticResource DateConverter}}"
+                                                                   Style="{StaticResource DetailBodyBaseMediumStyle}"
+                                                                   Margin="{StaticResource XSmallLeftMargin}"/>
+                                    <TextBlock Text="编辑于"
+                                                                   Margin="{StaticResource XSmallLeftMargin}"
+                                                                   Style="{StaticResource DetailBodyBaseMediumStyle}"
+                                                                   Visibility="{x:Bind attributes.editedAt,Converter={StaticResource NullVisibilityConverter}}"/>
+                                    <TextBlock Text="{x:Bind attributes.editedAt,Converter={StaticResource DateConverter}}"
+                                                                   Style="{StaticResource DetailBodyBaseMediumStyle}"
+                                                                   Visibility="{x:Bind attributes.editedAt,Converter={StaticResource NullVisibilityConverter}}"
+                                                                   Margin="4,0,0,0"/>
+
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!--文本区-->
+                        <StackPanel  Margin="{StaticResource SmallTopBottomMargin}" Padding="{StaticResource XSmallLeftTopRightBottomMargin}" HorizontalAlignment="Stretch">
+                            <!--<appstudio:HtmlBlock x:Name="HTMLTextBlock" Source="{x:Bind attributes.contentHtml,Mode=OneWay}"/>-->
+                            <controls:MarkdownTextBlock x:Name="MarkDownTextBlock"
+                                                        Text="{x:Bind attributes.contentMD}"
+                                                        LinkClicked="MarkDownTextBlock_LinkClicked"
+                                                        SchemeList="companyportal,randomscheme"
+                                                        UriPrefix="ms-appx://"
+                                                        ImageClicked="MarkDownTextBlock_ImageClicked"/>
+                        </StackPanel>
+
+                    </StackPanel>
+                    <!--底部操作区-->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                        <Button IsEnabled="False" >
+                            <StackPanel Orientation="Horizontal">
+                                <FontIcon Glyph="&#xE19F;" FontSize="14"/>
+                                <TextBlock Text="{x:Bind attributes.votes}" Margin="{StaticResource XSmallLeftMargin}"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button x:Name="ReplyButton" Margin="{StaticResource XSmallLeftMargin}" Click="ReplyButton_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <FontIcon Glyph="&#xE97A;" FontSize="14"/>
+                                <TextBlock Text="回复" Margin="{StaticResource XSmallLeftMargin}"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Margin="{StaticResource XSmallLeftMargin}" Background="#0000">
+                            <StackPanel Orientation="Horizontal">
+                                <FontIcon Glyph="&#xE10C;" FontSize="14"/>
+                            </StackPanel>
+                            <Button.Flyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem x:Name="ViewSourceButton" Text="查看源码" Click="ViewSourceButton_Click">
+
+                                    </MenuFlyoutItem>
+                                </MenuFlyout>
+                            </Button.Flyout>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+        </DataTemplate>
+        <DataTemplate x:DataType="models:Included" x:Key="TagsTemplate">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"   Background="{x:Bind attributes.color,Converter={StaticResource ColorToBrushConverter}}" Height="28" Padding="6">
+                <FontIcon Glyph="{x:Bind attributes.icon,Converter={StaticResource FontIconConverter}}" FontSize="15" HorizontalAlignment="Center"/>
+                <TextBlock Text="{x:Bind attributes.name}"  FontSize="14" HorizontalAlignment="Center" Margin="8,-2,0,0"/>
+            </StackPanel>
+        </DataTemplate>
+    </Page.Resources>
+    <Grid>
+        <ListView x:Name="DiscussionDetailsListView" ItemsSource="{x:Bind Posts}" SelectionMode="None" ItemTemplate="{StaticResource DiscussionDetailsTemlpate}">
+            <ListView.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock x:Name="TitleTextBlock" Style="{StaticResource TitleTextBlockStyle}" Text="{x:Bind DiscussionInfo.attributes.title,Mode=OneWay}" Margin="24,24,24,0" FontSize = "28" TextWrapping="Wrap"/>
+                    <controls:WrapPanel/>
+                    <ListView Name="WrapPanelContainer"
+                              Margin="24,12,0,0"
+                              Grid.Row="1"
+                              IsItemClickEnabled="True"
+                              SelectionMode="None"
+                              Padding="0"
+                              ItemTemplate="{StaticResource TagsTemplate}" ItemsSource="{x:Bind DiscussionDetails.data.tags}" ItemClick="WrapPanelContainer_ItemClick">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <controls:WrapPanel HorizontalSpacing="5"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem" >
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="VerticalAlignment" Value="Stretch"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="MinHeight" Value="20" />
+                                <Setter Property="MinWidth" Value="30" />
+
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                </Grid>
+            </ListView.Header>
+            <ListView.Footer>
+                <Grid Margin="0,0,0,40">
+                    <Button x:Name="LoadMoreButton" HorizontalAlignment="Stretch" Content="加载更多" Click="LoadMoreButton_Click" Height="48" Visibility="Collapsed"/>
+                </Grid>
+            </ListView.Footer>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem" >
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" ></Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
+
+        </ListView>
+        <CommandBar VerticalAlignment="Bottom">
+            <AppBarButton x:Name="ReplyAppBarButton" Label="回复" Click="ReplyAppBarButton_Click">
+                <AppBarButton.Icon>
+                    <FontIcon Glyph="&#xE97A;"/>
+                </AppBarButton.Icon>
+            </AppBarButton>
+
+            <AppBarToggleButton x:Name="ViewPosterAppBarToggleButton" Icon="Contact" Label="只看楼主" Click="ViewPosterAppBarToggleButton_Click"/>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton x:Name="RefreshAppBarButton" Icon="Refresh" Label="刷新" Click="RefreshAppBarButton_Click"/>
+                <AppBarButton x:Name="OpenInBrowserButton" Icon="Globe" Label="在浏览器中打开" Click="OpenInBrowserButton_Click"/>
+                <AppBarButton x:Name="OpenAPIButton" Label="打开API" Click="OpenAPIButton_Click">
+                    <AppBarButton.Icon>
+                        <FontIcon Glyph="&#xEC7A;"/>
+                    </AppBarButton.Icon>
+                </AppBarButton>
+                <AppBarSeparator/>
+                <AppBarButton x:Name="ToTopButton" Icon="Upload" Label="回到顶部" Click="ToTopButton_Click"/>
+                <AppBarButton x:Name="ToBottomBButton" Icon="Download" Label="转到底部" Click="ToBottomBButton_Click"/>
+
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+        <controls:Loading x:Name="LoadingControl" HorizontalContentAlignment="Center"
+                      VerticalContentAlignment="Center">
+            <controls:Loading.Background>
+                <SolidColorBrush Color="Black" Opacity="0.7" />
+            </controls:Loading.Background>
+            <Grid>
+                <StackPanel Orientation="Horizontal">
+                    <ProgressRing IsActive="True" Height="45" Width="45" VerticalAlignment="Center"/>
+                    <ContentControl x:Name="LoadingContentControl" Content="滚回功率，坐和放宽" FontSize="18" Margin="{StaticResource MediumLeftMargin}" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </controls:Loading>
+    </Grid>
+</Page>

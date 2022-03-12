@@ -1,0 +1,56 @@
+﻿<Page
+    x:Class="FlarumLite.Views.MyPages.EditForumPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:FlarumLite.Views.MyPages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:FlarumLite.core.ViewModels"
+
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <DataTemplate x:Name="ForumTemplate" x:DataType="models:Forum">
+            <Grid Margin="{StaticResource SmallLeftTopRightBottomMargin}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Image Source="{x:Bind logo}" Height="45" Width="45"/>
+                <StackPanel Grid.Column="1" Margin="{StaticResource SmallLeftMargin}" VerticalAlignment="Center">
+                    <TextBlock Text="{x:Bind name}" Style="{StaticResource SubtitleTextBlockStyle}" />
+                    <TextBlock Text="{x:Bind website}" Style="{StaticResource DetailBodyBaseMediumStyle}" />
+                </StackPanel>
+                <FontIcon Glyph="&#xE0AE;" HorizontalAlignment="Right" Grid.Column="1" FontSize="16"/>
+
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal"  Margin="24,24,0,0">
+            <TextBlock Text="切换论坛" Style="{StaticResource TitleTextBlockStyle}" FontSize="28"/>
+        </StackPanel>
+        <Grid Grid.Row="1">
+            <ListView x:Name="RecommendForumsListView" ItemsSource="{x:Bind Forums}" ItemTemplate="{StaticResource ForumTemplate}" SelectionMode="None" IsItemClickEnabled="True" ItemClick="RecommendForumsListView_ItemClick">
+                <ListView.Header>
+                    <Grid Margin="24,24,24,0">
+                        <StackPanel>
+                            <TextBlock Text="输入论坛网址" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                            <AutoSuggestBox x:Name="ForumAutoSuggestBox" Margin="{StaticResource SmallTopMargin}" QueryIcon="Forward" PlaceholderText="像这样:discuss.flarum.org" QuerySubmitted="AutoSuggestBox_QuerySubmitted"/>
+                            <TextBlock Text="推荐论坛" Margin="0,24,0,8" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                        </StackPanel>
+                    </Grid>
+                </ListView.Header>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem" >
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
+        </Grid>
+    </Grid>
+</Page>

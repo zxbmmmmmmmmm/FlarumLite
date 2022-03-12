@@ -1,5 +1,11 @@
-﻿using System;
+﻿using FlarumLite.Helpers;
+using FlarumLite.Services;
+using FlarumLite.Views;
+using FlarumLite.Views.Controls;
+using FlarumLite.Views.MyPages;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -7,6 +13,10 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
+using Windows.UI;
+using Windows.UI.Core;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -29,16 +39,28 @@ namespace FlarumLite
         public App()
         {
             this.InitializeComponent();
+            this.UnhandledException += OnAppUnhandledException;
             this.Suspending += OnSuspending;
+            if ("Windows.Mobile" == Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily)
+                Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;//win10m注册返回事件
         }
-
+        private void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
+        {
+            var rootFrame = Window.Current.Content as Frame;
+            if (rootFrame.CanGoBack)
+            {
+                rootFrame.GoBack();
+                e.Handled = true;
+            }
+        }
         /// <summary>
         /// 在应用程序由最终用户正常启动时进行调用。
         /// 将在启动应用程序以打开特定文件等情况下使用。
         /// </summary>
         /// <param name="e">有关启动请求和过程的详细信息。</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
-        {
+        protected override async void OnLaunched(LaunchActivatedEventArgs e)
+        {        
+            await FirstRunDisplayService.ShowIfAppropriateAsync();
             Frame rootFrame = Window.Current.Content as Frame;
 
             // 不要在窗口已包含内容时重复应用程序初始化，
@@ -66,13 +88,45 @@ namespace FlarumLite
                     // 当导航堆栈尚未还原时，导航到第一页，
                     // 并通过将所需信息作为导航参数传入来配置
                     // 参数
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    rootFrame.Navigate(typeof(Views.ShellPage), e.Arguments);
                 }
                 // 确保当前窗口处于活动状态
                 Window.Current.Activate();
             }
+
+            Windows.UI.Core.SystemNavigationManager.GetForCurrentView().BackRequested += BackRequested;
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = rootFrame.CanGoBack ? AppViewBackButtonVisibility.Visible : Windows.UI.Core.AppViewBackButtonVisibility.Collapsed;
+            rootFrame.Navigated += OnNavigated;
+
+            if (DeviceHelper.IsMobile)
+            {
+                StatusBar status = StatusBar.GetForCurrentView();
+                status.BackgroundColor = Color.FromArgb(0x00, 0x20, 0x20, 0x20);
+                status.BackgroundOpacity = 1; // 透明度
+                status.ForegroundColor = Colors.White;
+                //status.ProgressIndicator.ShowAsync();
+            }
+
         }
 
+
+        private void OnNavigated(object sender, NavigationEventArgs e)
+        {
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = ((Frame)sender).CanGoBack ?
+                AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
+        }
+
+        private void BackRequested(object sender, BackRequestedEventArgs e)
+        {
+            Frame rootFrame = Window.Current.Content as Frame;
+            if (rootFrame == null)
+                return;
+            if (rootFrame.CanGoBack && e.Handled == false)
+            {
+                e.Handled = true;
+                rootFrame.GoBack();
+            }
+        }
         /// <summary>
         /// 导航到特定页失败时调用
         /// </summary>
@@ -96,5 +150,13 @@ namespace FlarumLite
             //TODO: 保存应用程序状态并停止任何后台活动
             deferral.Complete();
         }
+
+        private void OnAppUnhandledException(object sender, Windows.UI.Xaml.UnhandledExceptionEventArgs e)
+        {
+            e.Handled = true;
+            new Toast(e.Message).show();
+            Debug.WriteLine(e.Message);
+        }
+
     }
 }

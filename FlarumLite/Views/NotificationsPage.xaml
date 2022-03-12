@@ -1,0 +1,73 @@
+﻿<Page
+    x:Class="FlarumLite.Views.NotificationsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:FlarumLite.Views"
+    xmlns:models="using:FlarumLite.core.Models"
+
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls" 
+    xmlns:converter="using:FlarumLite.Helpers.ValueConverters"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <converter:NotificationTextConverter x:Key="NotificationTextConverter"/>
+        <converter:NotificationIconConverter x:Key="NotificationIconConverter"/>
+
+    </Page.Resources>
+    <Grid>
+        <controls:PullToRefreshListView x:Name="NotificationsListView" ItemsSource="{x:Bind Notifications,Mode=OneWay}" SelectionMode="None" IsItemClickEnabled="True" RefreshRequested="NotificationsListView_RefreshRequested" IsPullToRefreshWithMouseEnabled="True" UseRefreshContainerWhenPossible="False" ItemClick="NotificationsListView_ItemClick">
+            <controls:PullToRefreshListView.ItemTemplate>
+                <DataTemplate x:DataType="models:Notification">
+                    <Grid>
+
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="{StaticResource MediumTopBottomMargin}">
+                            <FontIcon Glyph="{x:Bind attributes.contentType,Converter={StaticResource NotificationIconConverter}}" FontSize="20" Margin="{StaticResource XSmallLeftMargin}" Foreground="{StaticResource SystemControlForegroundBaseMediumBrush}"/>
+                            <Ellipse Width="40" Height="40" HorizontalAlignment="Left" Margin="{StaticResource SmallLeftMargin}">
+                                <Ellipse.Fill>
+                                    <ImageBrush ImageSource="{x:Bind attributes.user.attributes.avatarUrl}" />
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="{StaticResource SmallLeftMargin}">
+                                    <HyperlinkButton x:Name="UserHyperButton" Content="{x:Bind attributes.user.attributes.displayName}" FontSize="16"  Click="UserHyperButton_Click" Style="{StaticResource TextBlockButtonStyle}"  FontWeight="SemiBold"/>
+                                    <TextBlock Text="{x:Bind attributes.contentType,Converter={StaticResource NotificationTextConverter}}" FontSize="16" Margin="8,6,0,0" TextWrapping="Wrap"/>
+                                    <TextBlock Text="{x:Bind attributes.notificationContent.identifier,Converter={StaticResource EmojiConverter}}" FontSize="16" Margin="8,6,0,0" ToolTipService.ToolTip="{x:Bind attributes.notificationContent.display}"/>
+                                </StackPanel>
+                                <TextBlock  Margin="{StaticResource SmallLeftMargin}" Text="{x:Bind attributes.post.attributes.contentHtml,Converter={StaticResource RemoveCSSConverter}}" Style="{StaticResource DetailBodyBaseMediumStyle}" Height="20"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <TextBlock Text="{x:Bind attributes.createdAt,Converter={StaticResource DateConverter}}" HorizontalAlignment="Right" Style="{StaticResource DetailBodyBaseMediumStyle}" VerticalAlignment="Bottom" Margin="0,0,0,8"/>
+                    </Grid>
+                </DataTemplate>
+            </controls:PullToRefreshListView.ItemTemplate>
+            <controls:PullToRefreshListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem" >
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" ></Setter>
+                </Style>
+            </controls:PullToRefreshListView.ItemContainerStyle>
+            <controls:PullToRefreshListView.ReleaseToRefreshContent>
+                <Grid >
+                    <TextBlock             
+                        Canvas.ZIndex="2"
+                        FontSize="16"                  
+                        Text="松开以刷新" 
+                        Foreground="{StaticResource AppBarItemForegroundThemeBrush}"
+                        Margin="{StaticResource SmallLeftMargin}"/>
+                </Grid>
+
+            </controls:PullToRefreshListView.ReleaseToRefreshContent>
+            <controls:PullToRefreshListView.PullToRefreshContent>
+                <Grid>
+                    <TextBlock             
+                        Canvas.ZIndex="2"
+                        FontSize="16"                  
+                        Opacity="0.5"
+                        Text="下拉以刷新" 
+                        Foreground="{StaticResource AppBarItemForegroundThemeBrush}"
+                        Margin="{StaticResource SmallLeftMargin}" />
+                </Grid>
+            </controls:PullToRefreshListView.PullToRefreshContent>
+        </controls:PullToRefreshListView>
+    </Grid>
+</Page>

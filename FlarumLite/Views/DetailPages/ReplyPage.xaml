@@ -1,0 +1,98 @@
+﻿<Page
+    x:Class="FlarumLite.Views.DetailPages.ReplyPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:FlarumLite.Views.DetailPages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters" xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" SizeChanged="Page_SizeChanged">
+
+    <Page.Resources>
+        <converters:ToolbarFormatActiveConverter x:Key="IsFormatMarkdown"
+                    Format="MarkDown" />
+    </Page.Resources>
+
+    <Grid x:Name="MainGrid">
+        <ScrollViewer >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Border x:Name="width"/>
+                    <Grid Background="#4C4F4F4F">
+                        <TextBlock x:Name="DiscussionTextBlock" Width="{x:Bind width.Width}" VerticalAlignment="Center" Margin="{StaticResource SmallLeftMargin}" Style="{StaticResource DetailBodyBaseMediumStyle}" FontStyle="Italic"/>
+                        <AppBarButton x:Name="SendButton" HorizontalAlignment="Right" Icon="Send" Label="回复" Style="{StaticResource RightLabelAppBarButtonStyle}" Width="80" Height="48" Click="SendButton_Click" />
+                    </Grid>
+                    <controls:TextToolbar x:Name="Toolbar"
+                          Editor="{Binding ElementName=EditZone}"
+                          IsEnabled="True"
+                          Format="MarkDown"
+                          UseURIChecker="True"
+                          Background="#4C4F4F4F"  HorizontalAlignment="Stretch" Grid.Row="1">
+                    </controls:TextToolbar>
+                    <RichEditBox x:Name="EditZone"
+                     PlaceholderText="在此输入回复"
+                     TextWrapping="Wrap"
+                     TextChanged="EditZone_TextChanged"
+                     VerticalContentAlignment="Stretch"
+                     MinHeight="256"
+                     Padding="10,3"
+                     BorderThickness="1"
+                     BorderBrush="{ThemeResource SystemControlForegroundChromeHighBrush}"
+                     Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" Style="{StaticResource TransparentBackgroundTextBoxStyle}" Grid.Row="2" />
+                </Grid>
+
+
+                <Grid x:Name="MD"
+                      Grid.Row="1"
+                      Margin="12,12,12,12"
+                      Visibility="{Binding Format, ElementName=Toolbar, Mode=OneWay, Converter={StaticResource IsFormatMarkdown}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <TextBlock Foreground="{ThemeResource SystemControlPageTextBaseHighBrush}"
+                     Style="{StaticResource SubtitleTextBlockStyle}"
+                     Text="预览"/>
+                    <controls:MarkdownTextBlock x:Name="Previewer"
+                                      Grid.Row="1"
+                                      Margin="0, 8, 0, 0"
+                                      Canvas.ZIndex="99"
+                                      Foreground="{ThemeResource SystemControlPageTextBaseHighBrush}"
+                                      ScrollViewer.IsVerticalRailEnabled="False" 
+                                      LinkClicked="Previewer_LinkClicked" />
+                </Grid>
+                <Grid x:Name="Tails"
+                      Grid.Row="2"
+                      Margin="12,12,12,32">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Foreground="{ThemeResource SystemControlPageTextBaseHighBrush}"
+                     Style="{StaticResource SubtitleTextBlockStyle}"
+                     Text="选项"/>
+                    <Grid Grid.Row="1">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox x:Name="TailsCheckBox" Content="使用小尾巴" IsChecked="True" />
+                                <HyperlinkButton Name="EditTailsButton" Content="编辑" Style="{StaticResource TextBlockButtonStyle}" Margin="-8,-2,0,0" Click="EditTailsButton_Click" />
+                            </StackPanel>
+                            <controls:MarkdownTextBlock x:Name="TailsTextBlock" IsEnabled="False"  Margin="{StaticResource XSmallTopMargin}"/>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Page>

@@ -1,0 +1,85 @@
+﻿<Page
+    x:Class="FlarumLite.Views.CatagoriesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:FlarumLite.Views"
+    xmlns:models="using:FlarumLite.core.Models"
+
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    SizeChanged="Page_SizeChanged">
+
+    <Grid>
+        <Border x:Name="width"/>
+        <controls:PullToRefreshListView x:Name="CatagoriesListView"
+                                        SelectionMode="None"
+                                        ItemsSource="{x:Bind Catagories}"                               
+                                        PullThreshold="50"
+                                        OverscrollLimit="0.14"
+                                        RefreshRequested="CatagoriesListView_RefreshRequested"
+                                        IsPullToRefreshWithMouseEnabled="True"
+                                        UseRefreshContainerWhenPossible="False"
+                                        IsItemClickEnabled="True"
+                                        ItemClick="CatagoriesListView_ItemClick">
+            <controls:PullToRefreshListView.ItemTemplate>
+                <DataTemplate x:DataType="models:Catagory">
+                    <Grid Background="{x:Bind attributes.color,Converter={StaticResource ColorToBrushConverter}}" Margin="{StaticResource SmallTopBottomMargin}" x:Name="CatagoryGrid">
+                        <Grid Margin="{StaticResource SmallLeftTopRightBottomMargin}" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <FontIcon Glyph="{x:Bind attributes.icon,Converter={StaticResource FontIconConverter}}" FontSize="24"/>
+                            <StackPanel HorizontalAlignment="Left" Grid.Column="1" Margin="{StaticResource SmallLeftMargin}">
+                                <TextBlock Text="{x:Bind attributes.name}" Style="{StaticResource TitleTextBlockStyle}"/>
+                                <TextBlock Text="{x:Bind attributes.description}" Style="{StaticResource DetailBodyBaseMediumStyle}" Width="{Binding ElementName=width,Path=Width}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="1">
+                                <StackPanel>
+                                    <TextBlock Text="{x:Bind attributes.discussionCount}" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="主题" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                                <Border BorderBrush="{StaticResource ComboBoxBorderThemeBrush}" BorderThickness="1" Height="25" Margin="{StaticResource SmallLeftRightMargin}"/>
+                                <StackPanel >
+                                    <TextBlock Text="{x:Bind attributes.postCount}" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="帖子" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+
+                    </Grid>
+                </DataTemplate>
+            </controls:PullToRefreshListView.ItemTemplate>
+            <controls:PullToRefreshListView.ReleaseToRefreshContent>
+                <Grid>
+                    <TextBlock             
+                        FontSize="16"                  
+                        Text="松开以刷新" 
+                        Foreground="{StaticResource AppBarItemForegroundThemeBrush}"
+                        Margin="{StaticResource SmallLeftMargin}"/>
+                </Grid>
+
+            </controls:PullToRefreshListView.ReleaseToRefreshContent>
+            <controls:PullToRefreshListView.PullToRefreshContent>
+                <Grid>
+                    <TextBlock             
+                        FontSize="16"                  
+                        Opacity="0.5"
+                        Text="下拉以刷新" 
+                        Foreground="{StaticResource AppBarItemForegroundThemeBrush}"
+                        Margin="{StaticResource SmallLeftMargin}"/>
+                </Grid>
+
+            </controls:PullToRefreshListView.PullToRefreshContent>
+            <controls:PullToRefreshListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem" >
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" ></Setter>
+                </Style>
+            </controls:PullToRefreshListView.ItemContainerStyle>
+        </controls:PullToRefreshListView>
+        <ProgressBar x:Name="LoadingProgressBar" Height="10" VerticalAlignment="Top" Visibility="Visible" Canvas.ZIndex="1" IsIndeterminate="True" HorizontalAlignment="Stretch"/>
+
+    </Grid>
+</Page>
