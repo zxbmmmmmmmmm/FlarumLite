@@ -88,6 +88,7 @@ namespace FlarumLite.Views
             if(addingPosts.Count == 0)
             {
                 new Toast("没有内容").show();
+                return;
             }               
             var addingUsers = new ObservableCollection<Included>();
             var addingTags = new ObservableCollection<Included>();
