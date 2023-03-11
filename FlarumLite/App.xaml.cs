@@ -118,14 +118,7 @@ namespace FlarumLite
 
         private void BackRequested(object sender, BackRequestedEventArgs e)
         {
-            Frame rootFrame = Window.Current.Content as Frame;
-            if (rootFrame == null)
-                return;
-            if (rootFrame.CanGoBack && e.Handled == false)
-            {
-                e.Handled = true;
-                rootFrame.GoBack();
-            }
+            NavigationService.GoBack();
         }
         /// <summary>
         /// 导航到特定页失败时调用

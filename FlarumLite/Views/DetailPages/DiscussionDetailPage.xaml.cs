@@ -338,9 +338,7 @@ namespace FlarumLite.Views.DetailPages
 
         private void MarkDownTextBlock_ImageClicked(object sender, Microsoft.Toolkit.Uwp.UI.Controls.LinkClickedEventArgs e)
         {
-            var images = new ObservableCollection<Uri>();
-            images.Add(new Uri(e.Link));
-            NavigationService.Navigate<ImageDetailPage>();
+            new ImageView().Show(e.Link);
         }
 
         private void ViewPosterAppBarToggleButton_Click(object sender, RoutedEventArgs e)

@@ -148,6 +148,9 @@
       <DependentUpon>CatagoriesPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\BasePage.cs" />
+    <Compile Include="Views\Controls\ImageView.xaml.cs">
+      <DependentUpon>ImageView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Controls\PostSourceDialog.xaml.cs" />
     <Compile Include="Views\Controls\Toast.xaml.cs">
       <DependentUpon>Toast.xaml</DependentUpon>
@@ -288,6 +291,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Views\CatagoriesPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\ImageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FlarumLite.Views.Controls;
+using System;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -52,9 +53,12 @@ namespace FlarumLite.Services
 
         public static bool GoBack()
         {
-            if (CanGoBack)
+            if (CanGoBack || ImageView.Current != null)
             {
-                Frame.GoBack();
+                if (ImageView.Current != null)
+                    ImageView.Current.Hide();
+                else
+                    Frame.GoBack();
                 return true;
             }
 

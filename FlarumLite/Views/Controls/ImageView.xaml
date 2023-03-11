@@ -1,0 +1,58 @@
+﻿<UserControl
+    x:Class="FlarumLite.Views.Controls.ImageView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:FlarumLite.Views.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+    <Grid Name="ControlGrid"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Black">
+        <Button x:Name="CloseBtn"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                BorderThickness="0"
+                Background="Transparent"
+                Canvas.ZIndex="1"
+                Click="CloseBtn_Click"
+                Margin="64">
+            <FontIcon Glyph="&#xE106;" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+        </Button>
+        <ProgressRing x:Name="LoadingProgressRing" Height="64" Width="64" HorizontalAlignment="Center"  VerticalAlignment="Center" IsActive="True"/>
+
+        <ScrollViewer HorizontalAlignment="Stretch"
+                      Name="MainScrollViewer"
+                      ZoomMode="Enabled"
+                      MinZoomFactor="0.8"
+                      VerticalScrollMode="Enabled"
+                      VerticalScrollBarVisibility="Visible"
+                      HorizontalScrollMode="Enabled"
+                      HorizontalScrollBarVisibility="Visible" Margin="100">
+            <controls:ImageEx x:Name="MainImage" MaxWidth="{x:Bind MainScrollViewer.ViewportWidth,Mode=OneWay}" MaxHeight="{x:Bind MainScrollViewer.ViewportHeight,Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" ImageExOpened="MainImage_ImageExOpened" />
+        </ScrollViewer>
+        <StackPanel  Margin="24"  HorizontalAlignment="Center" VerticalAlignment="Bottom" >
+            <CommandBar Background="Transparent">
+                <AppBarButton x:Name="ZoomInBtn" Icon="ZoomIn" Click="ZoomInBtn_Click" ToolTipService.ToolTip="放大" Label="放大"/>
+                <AppBarButton x:Name="ZoomOutBtn" Icon="ZoomOut" Click="ZoomOutBtn_Click" ToolTipService.ToolTip="缩小" Label="缩小"/>
+                <AppBarSeparator/>
+                <AppBarButton x:Name="SaveBtn" Icon="Save" Click="SaveBtn_Click" ToolTipService.ToolTip="保存" Label="保存"/>
+                <AppBarButton x:Name="CopyBtn" Icon="Copy" Click="CopyBtn_Click" ToolTipService.ToolTip="复制" Label="复制"/>
+                <AppBarButton Icon="Link" ToolTipService.ToolTip="查看链接" Label="查看链接">
+                    <AppBarButton.Flyout>
+                        <Flyout>
+                            <StackPanel Orientation="Horizontal" >
+                                <Button x:Name="CopyLinkBtn" BorderThickness="0" Background="Transparent" Click="CopyLinkBtn_Click">
+                                    <FontIcon Glyph="&#xE16F;" FontSize="14"/>
+                                </Button>
+                                <TextBlock x:Name="LinkTextBlock" IsTextSelectionEnabled="True" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Flyout>
+                    </AppBarButton.Flyout>
+                </AppBarButton>
+            </CommandBar>
+            <TextBlock Text="Ctrl+鼠标滚轮可进行缩放" Style="{StaticResource DetailBodyBaseMediumStyle}" HorizontalAlignment="Center"/>
+        </StackPanel>
+
+    </Grid>
+</UserControl>
