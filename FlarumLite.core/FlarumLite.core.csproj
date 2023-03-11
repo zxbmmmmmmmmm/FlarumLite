@@ -124,7 +124,6 @@
     <Compile Include="Models\DiscussionDetails.cs" />
     <Compile Include="Models\LoginData.cs" />
     <Compile Include="Models\Notifications.cs" />
-    <Compile Include="Models\PageStackContent.cs" />
     <Compile Include="Models\Posts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\Forums.cs" />
