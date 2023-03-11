@@ -3,6 +3,7 @@ using FlarumLite.core.Models;
 using FlarumLite.Helpers;
 using FlarumLite.Helpers.ValueConverters;
 using FlarumLite.Services;
+using FlarumLite.Views.Controls;
 using Html2Markdown;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
@@ -41,8 +43,8 @@ namespace FlarumLite.Views.DetailPages
         public ObservableCollection<Included> Users = new ObservableCollection<Included>();
         public string NavigatingDiscussion;
         public string NavigatingPost;
-        public int PostNumberToLoad = 10;
-
+        public int PostNumberToLoad = 15;
+        public double Scroll = 0;
 
         public DiscussionDetailPage()
         {
@@ -61,9 +63,14 @@ namespace FlarumLite.Views.DetailPages
 
             NavigatingDiscussion = navigate.targetDiscussion.ToString();
             NavigatingPost = navigate.targetPost.ToString();
-
+            
             if (e.NavigationMode == NavigationMode.Back)//判断是不是按了返回键载入的
             {
+                if(Scroll != 0)
+                {
+                    ScrollViewer scrviewer = FindVisualChildByName<ScrollViewer>(DiscussionDetailsListView, "ScrollViewer");
+                    scrviewer.ScrollToVerticalOffset(Scroll);
+                }
                 return;
             }
             else
@@ -72,7 +79,7 @@ namespace FlarumLite.Views.DetailPages
                 Posts.Clear();
                 PosterPosts.Clear();
                 Users.Clear();
-                PostNumberToLoad = 10;
+                PostNumberToLoad = 15;
                 DiscussionDetails = new DiscussionDetails();
                 DiscussionInfo = new Datum();
                 GetDiscussionDetails(NavigatingDiscussion);
@@ -89,7 +96,7 @@ namespace FlarumLite.Views.DetailPages
 
         }
 
-        private async void GetDiscussionDetails(string DiscussionId)  
+        private async Task GetDiscussionDetails(string DiscussionId)  
         {
             LoadingControl.IsLoading = true;
             var addinPosts = new ObservableCollection<Included>();
@@ -97,7 +104,18 @@ namespace FlarumLite.Views.DetailPages
             var addingUsers = new ObservableCollection<Included>();
             var addingDiscussionDetails = new DiscussionDetails();
             var forum = ApplicationData.Current.LocalSettings.Values["forum"].ToString();
-            addingDiscussionDetails = await FlarumProxy.GetDiscussionDetails($"https://{forum}/api/discussions/{DiscussionId}?bySlug=true&page[near]={PostNumberToLoad}&page[limit]=20");
+            int num = 15;
+            if(Posts != null&&Posts.Count!=0)
+            {
+                num = (int)Posts[Posts.Count - 1].attributes.number +15;
+            }
+
+
+            addingDiscussionDetails = await FlarumProxy.GetDiscussionDetails($"https://{forum}/api/discussions/{DiscussionId}?bySlug=true&page[near]={num}&page[limit]=30");
+
+            LoadingControl.IsLoading = false;
+            
+
             addingIncludeds = addingDiscussionDetails.included;
 
             LoadingControl.IsLoading = false;
@@ -117,7 +135,7 @@ namespace FlarumLite.Views.DetailPages
                         {
                             included.relationships.user = new core.Models.User { data = new Data { id = "0" } };
                         }
-                        if (included.attributes.number < PostNumberToLoad + 10 && included.attributes.number > Posts.Count())
+                        if (included.attributes.number < num + 15 && included.attributes.number > num - 15)
                         {
                             if(included.relationships.discussion!= null)
                             {
@@ -127,7 +145,7 @@ namespace FlarumLite.Views.DetailPages
                         }
                         break;
                     case "tags":
-                        if(PostNumberToLoad == 10)
+                        if(Posts == null || Posts.Count == 0)
                         {
                             addingDiscussionDetails.data.tags.Add(included);
                         }
@@ -137,7 +155,7 @@ namespace FlarumLite.Views.DetailPages
                         break;
                 }
             }
-            if (PostNumberToLoad == 10)//第一次加载
+            if (Posts == null ||Posts.Count == 0)//第一次加载
             {
                 if (addingDiscussionDetails.data.relationships.user == null)
                 {
@@ -209,7 +227,7 @@ namespace FlarumLite.Views.DetailPages
             {
                 DiscussionDetailsListView.ItemsSource = Posts;
             }
-            if(Posts.Count >= DiscussionInfo.attributes.commentCount)
+            if(Posts[Posts.Count - 1].attributes.number >= DiscussionInfo.attributes.commentCount)
             {
                 LoadMoreButton.Visibility = Visibility.Collapsed;
             }
@@ -217,7 +235,7 @@ namespace FlarumLite.Views.DetailPages
             {
                 LoadMoreButton.Visibility = Visibility.Visible;
             }
-            if (PostNumberToLoad == 10)
+            if (PostNumberToLoad == 15)
             {
                 ScrollIntoPost(NavigatingPost);
             }
@@ -225,6 +243,8 @@ namespace FlarumLite.Views.DetailPages
 
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
         {
+            ScrollViewer scrviewer = FindVisualChildByName<ScrollViewer>(DiscussionDetailsListView,"ScrollViewer");
+            Scroll = scrviewer.VerticalOffset;
             base.OnNavigatingFrom(e);
         }
 
@@ -232,9 +252,15 @@ namespace FlarumLite.Views.DetailPages
         {
         }
 
-        private void ViewSourceButton_Click(object sender, RoutedEventArgs e)
+        private async void ViewSourceButton_Click(object sender, RoutedEventArgs e)
         {
 
+            var item = sender as MenuFlyoutItem;
+            var html = (item.DataContext as Included).attributes.contentHtml;
+            var md = (item.DataContext as Included).attributes.contentMD;
+
+            var dialog = new PostSourceDialog(md,html);
+            await dialog.ShowAsync();
         }
 
         private void UserButton_Click(object sender, RoutedEventArgs e)
@@ -311,7 +337,9 @@ namespace FlarumLite.Views.DetailPages
 
         private void MarkDownTextBlock_ImageClicked(object sender, Microsoft.Toolkit.Uwp.UI.Controls.LinkClickedEventArgs e)
         {
-
+            var images = new ObservableCollection<Uri>();
+            images.Add(new Uri(e.Link));
+            NavigationService.Navigate<ImageDetailPage>();
         }
 
         private void ViewPosterAppBarToggleButton_Click(object sender, RoutedEventArgs e)
@@ -327,17 +355,17 @@ namespace FlarumLite.Views.DetailPages
             }
         }
 
-        private void RefreshAppBarButton_Click(object sender, RoutedEventArgs e)
+        private async void RefreshAppBarButton_Click(object sender, RoutedEventArgs e)
         {
             NavigatingPost = "-1";
             DiscussionDetails = new DiscussionDetails();
             Includeds.Clear();
             Posts.Clear();
             Users.Clear();
-            PostNumberToLoad = 10;
+            PostNumberToLoad = 15;
             PosterPosts.Clear();
             LoadMoreButton.Visibility = Visibility.Visible;
-            GetDiscussionDetails(NavigatingDiscussion);
+            await GetDiscussionDetails(NavigatingDiscussion);
 
         }
 
@@ -352,10 +380,9 @@ namespace FlarumLite.Views.DetailPages
             await Launcher.LaunchUriAsync(new Uri($"https://{forum}/d/{NavigatingDiscussion}"));
         }
 
-        private void LoadMoreButton_Click(object sender, RoutedEventArgs e)
+        private async void LoadMoreButton_Click(object sender, RoutedEventArgs e)
         {
-            PostNumberToLoad = PostNumberToLoad + 20;
-            GetDiscussionDetails(NavigatingDiscussion);
+            await GetDiscussionDetails(NavigatingDiscussion);
         }
 
         private async void OpenAPIButton_Click(object sender, RoutedEventArgs e)
@@ -404,6 +431,47 @@ namespace FlarumLite.Views.DetailPages
             string[] navigate = { NavigatingDiscussion, discussionName };
             NavigationService.Navigate<ReplyPage> (navigate);
         }
+
+        private async void LoadAllButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+            while ((Posts[Posts.Count - 1].attributes.number >= DiscussionInfo.attributes.commentCount) != true)
+            {
+                await GetDiscussionDetails(NavigatingDiscussion);
+                ToBottomBButton_Click(null, null);
+            }
+
+
+        }
+
+        public static T FindVisualChildByName<T>(DependencyObject parent, string name) where T : DependencyObject
+        {
+            try
+            {
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+                {
+                    var child = VisualTreeHelper.GetChild(parent, i);
+                    string controlName = child.GetValue(Control.NameProperty) as string;
+                    if ((string.IsNullOrEmpty(name) || controlName == name) && child is T)
+                    {
+                        return child as T;
+                    }
+                    else
+                    {
+                        T result = FindVisualChildByName<T>(child, name);
+                        if (result != null)
+                            return result;
+                    }
+                }
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+//在list
     }
     public class DiscussionNavigationInfo 
     {

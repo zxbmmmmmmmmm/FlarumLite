@@ -15,6 +15,8 @@ using FlarumLite.Views.MyPages;
 using FlarumLite.Services;
 using FlarumLite.Views.Controls;
 using FlarumLite.Views.DetailPages;
+using Windows.Storage.Streams;
+using System.Diagnostics;
 
 namespace FlarumLite.Helpers
 {
@@ -185,6 +187,45 @@ namespace FlarumLite.Helpers
             var data = (LoginData)serializer.ReadObject(ms);*/
 
             return response;
+
+        }
+        public static async void UploadFile(string discussion)//上传文件
+        {
+            var picker = new Windows.Storage.Pickers.FileOpenPicker();
+            picker.ViewMode = Windows.Storage.Pickers.PickerViewMode.Thumbnail;
+            picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
+            picker.FileTypeFilter.Add(".jpg");
+            picker.FileTypeFilter.Add(".jpeg");
+            picker.FileTypeFilter.Add(".png");
+            StorageFile file = await picker.PickSingleFileAsync();//选择文件
+            if(file != null)
+            {
+                var client = new HttpClient();
+                var token = ApplicationData.Current.LocalSettings.Values["token"].ToString();
+                client.DefaultRequestHeaders.Add("Authorization", "Token " + token);
+                var forum = ApplicationData.Current.LocalSettings.Values["forum"].ToString();
+                client.DefaultRequestHeaders.Add("user-agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0");
+                client.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
+                client.DefaultRequestHeaders.Add("Keep-Alive", "timeout=600");
+                client.DefaultRequestHeaders.Add("Referer", $"https://{forum}/d/{discussion}/21");
+
+
+
+                var content = new MultipartFormDataContent();
+                var streamData = await file.OpenReadAsync();
+                var bytes = new byte[streamData.Size];
+                using (var dataReader = new DataReader(streamData))
+                {
+                    await dataReader.LoadAsync((uint)streamData.Size);
+                    dataReader.ReadBytes(bytes);
+                }
+                var streamContent = new ByteArrayContent(bytes);
+                content.Add(streamContent,"files[]");
+
+                var response = await client.PostAsync(new Uri($"https://{forum}/api/fof/upload"),content);//上传
+                var responseString = await response.Content.ReadAsStringAsync();
+
+            }
 
         }
         private static string getJsonByObject(Object obj)

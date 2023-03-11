@@ -66,6 +66,26 @@
                     </StackPanel>
                     <!--底部操作区-->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                        <!--<ListView Name="WrapPanelContainer"
+                                          IsItemClickEnabled="True"
+                                          SelectionMode="None"
+                                          ItemTemplate="{StaticResource TagsTemplate}" 
+                                          ItemsSource="{x:Bind tags}" Padding="0" Background="#0000" Margin="0,5,0,0" ItemClick="WrapPanelContainer_ItemClick" >
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <controls:WrapPanel Padding="0" VerticalSpacing="0" HorizontalSpacing="0" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Padding" Value="0"/>
+                                    <Setter Property="VerticalAlignment" Value="Stretch"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="MinHeight" Value="20" />
+                                    <Setter Property="MinWidth" Value="30" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>-->
                         <Button IsEnabled="False" >
                             <StackPanel Orientation="Horizontal">
                                 <FontIcon Glyph="&#xE19F;" FontSize="14"/>
@@ -100,6 +120,12 @@
         <DataTemplate x:DataType="models:Included" x:Key="TagsTemplate">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"   Background="{x:Bind attributes.color,Converter={StaticResource ColorToBrushConverter}}" Height="28" Padding="6">
                 <FontIcon Glyph="{x:Bind attributes.icon,Converter={StaticResource FontIconConverter}}" FontSize="15" HorizontalAlignment="Center"/>
+                <TextBlock Text="{x:Bind attributes.name}"  FontSize="14" HorizontalAlignment="Center" Margin="8,-2,0,0"/>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:DataType="models:Included" x:Key="ReactionsTemplate">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"  Height="28" Padding="6">
+
                 <TextBlock Text="{x:Bind attributes.name}"  FontSize="14" HorizontalAlignment="Center" Margin="8,-2,0,0"/>
             </StackPanel>
         </DataTemplate>
@@ -159,6 +185,8 @@
             </AppBarButton>
 
             <AppBarToggleButton x:Name="ViewPosterAppBarToggleButton" Icon="Contact" Label="只看楼主" Click="ViewPosterAppBarToggleButton_Click"/>
+            <AppBarButton x:Name="LoadAllButton" Icon="Download" Label="加载全部" Click="LoadAllButton_Click"/>
+
             <CommandBar.SecondaryCommands>
                 <AppBarButton x:Name="RefreshAppBarButton" Icon="Refresh" Label="刷新" Click="RefreshAppBarButton_Click"/>
                 <AppBarButton x:Name="OpenInBrowserButton" Icon="Globe" Label="在浏览器中打开" Click="OpenInBrowserButton_Click"/>

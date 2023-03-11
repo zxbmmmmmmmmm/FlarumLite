@@ -13,6 +13,7 @@
     <Page.Resources>
         <converter:NotificationTextConverter x:Key="NotificationTextConverter"/>
         <converter:NotificationIconConverter x:Key="NotificationIconConverter"/>
+        <converter:NullVisibilityConverter x:Key="NullVisibilityConverter"/>
 
     </Page.Resources>
     <Grid>
@@ -32,7 +33,7 @@
                                 <StackPanel Orientation="Horizontal" Margin="{StaticResource SmallLeftMargin}">
                                     <HyperlinkButton x:Name="UserHyperButton" Content="{x:Bind attributes.user.attributes.displayName}" FontSize="16"  Click="UserHyperButton_Click" Style="{StaticResource TextBlockButtonStyle}"  FontWeight="SemiBold"/>
                                     <TextBlock Text="{x:Bind attributes.contentType,Converter={StaticResource NotificationTextConverter}}" FontSize="16" Margin="8,6,0,0" TextWrapping="Wrap"/>
-                                    <TextBlock Text="{x:Bind attributes.notificationContent.identifier,Converter={StaticResource EmojiConverter}}" FontSize="16" Margin="8,6,0,0" ToolTipService.ToolTip="{x:Bind attributes.notificationContent.display}"/>
+                                    <TextBlock Text="{x:Bind attributes.notificationContent.identifier,Converter={StaticResource EmojiConverter}}" FontSize="16" Margin="8,6,0,0" ToolTipService.ToolTip="{x:Bind attributes.notificationContent.display}" Visibility="{x:Bind attributes.notificationContent.identifier,Converter={StaticResource NullVisibilityConverter}}"/>
                                 </StackPanel>
                                 <TextBlock  Margin="{StaticResource SmallLeftMargin}" Text="{x:Bind attributes.post.attributes.contentHtml,Converter={StaticResource RemoveCSSConverter}}" Style="{StaticResource DetailBodyBaseMediumStyle}" Height="20"/>
                             </StackPanel>

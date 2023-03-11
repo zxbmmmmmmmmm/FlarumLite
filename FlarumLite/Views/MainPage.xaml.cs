@@ -109,6 +109,10 @@ namespace FlarumLite.Views
 
             foreach (var post in addingPosts)
             {
+                if (post.relationships.firstPost != null)
+                {
+                    post.attributes.firstPost = addingIncludeds.First(p => p.id == post.relationships.firstPost.data.id);
+                }
                 post.tags = new ObservableCollection<Included>();
                 foreach(var tag in post.relationships.tags.data)
                 {
@@ -140,7 +144,8 @@ namespace FlarumLite.Views
 
             foreach (var post in addingPosts)
             {
-                if(post.relationships.user!= null)
+
+                if (post.relationships.user!= null)
                 {
                     post.attributes.user = users.First(p => p.id == post.relationships.user.data.id).attributes;
                 }
@@ -157,6 +162,7 @@ namespace FlarumLite.Views
                 {
                     post.attributes.lastPostedUser = new Attributes { displayName = "【已注销】", name = "已注销" ,avatarUrl = "https://flarum.csur.fun/2022-02-08/1644323380-214777-guest.png" };
                 }
+
             }
             return addingPosts;
         }
@@ -214,8 +220,7 @@ namespace FlarumLite.Views
             var clicked = item.DataContext as Datum;
 
             var dialog = new DiscussionPreviewDialog(clicked.id);
-            Included included = Includeds.First(p => p.id == clicked.relationships.firstPost.data.id);
-            dialog.BindData(included);
+            dialog.BindData(clicked.attributes.firstPost);
             await dialog.ShowAsync();
 
         }

@@ -190,6 +190,7 @@ namespace FlarumLite.core.Models
         public string iconInfo { get; set; }
         public string nameSingular { get; set; }
         public ImageSource avatar { get; set; }
+        public Included firstPost { get; set; }
     }
 
 

@@ -37,7 +37,7 @@ namespace FlarumLite.Views
             NavigationCacheMode = NavigationCacheMode.Required;
             this.InitializeComponent();           
         }
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             if (e.NavigationMode != NavigationMode.Back)//判断是不是按了返回键载入的
             {
@@ -47,7 +47,14 @@ namespace FlarumLite.Views
                 }
                 else
                 {
-                    GetNotifications(null);
+                    var forum = ApplicationData.Current.LocalSettings.Values["forum"].ToString();
+                    var addingNotificationsData = await FlarumProxy.GetNotifications($"https://{forum}/api/notifications?&page[limit]=25");
+                    if (addingNotificationsData.data == null)
+                    {
+                        new Toast("未登录").show();
+                        return;
+                    }
+                    GetNotifications(addingNotificationsData);
                 }
             }
             else
@@ -55,18 +62,10 @@ namespace FlarumLite.Views
                 return;
             }
         }
-        private async void GetNotifications(Notifications addingNotificationsData)
+        private void GetNotifications(Notifications addingNotificationsData)
         {
-            if(addingNotificationsData == null|| addingNotificationsData.data == null)
-            {
-                var forum = ApplicationData.Current.LocalSettings.Values["forum"].ToString();
-                addingNotificationsData = await FlarumProxy.GetNotifications($"https://{forum}/api/notifications?&page[limit]=25");
-                if (addingNotificationsData.data == null)
-                {
-                    new Toast("未登录").show();
-                    return;
-                }
-            }
+            Notifications.Clear();
+
             var addingNotifications = addingNotificationsData.data;
             var addingUsers = addingNotificationsData.included.Where(p => p.type == "users");
             var addingPosts = addingNotificationsData.included.Where(p => p.type == "posts");
@@ -114,10 +113,17 @@ namespace FlarumLite.Views
             NavigationService.Navigate<UserDetailPage>(user.id);
         }
 
-        private void NotificationsListView_RefreshRequested(object sender, EventArgs e)
+        private async void NotificationsListView_RefreshRequested(object sender, EventArgs e)
         {
             Notifications.Clear();
-            GetNotifications(null);
+            var forum = ApplicationData.Current.LocalSettings.Values["forum"].ToString();
+            var addingNotificationsData = await FlarumProxy.GetNotifications($"https://{forum}/api/notifications?&page[limit]=25");
+            if (addingNotificationsData.data == null)
+            {
+                new Toast("未登录").show();
+                return;
+            }
+            GetNotifications(addingNotificationsData);
         }
 
         private void NotificationsListView_ItemClick(object sender, ItemClickEventArgs e)

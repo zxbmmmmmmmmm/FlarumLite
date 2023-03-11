@@ -3,6 +3,8 @@ using FlarumLite.Helpers;
 using FlarumLite.Services;
 using FlarumLite.Views.Controls;
 using FlarumLite.Views.MyPages;
+using Microsoft.Toolkit.Uwp.UI.Controls.TextToolbarButtons;
+using Microsoft.Toolkit.Uwp.UI.Controls.TextToolbarFormats.MarkDown;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -48,6 +50,13 @@ namespace FlarumLite.Views.DetailPages
             str = str.Replace("\r\n\r\n", "\n\nㅤ\n\n");
             str = str.Replace("\r\n", "\n\n");
             TailsTextBlock.Text = str;
+            if(Toolbar.CustomButtons.Count == 0)
+            {
+                AddButtons();
+
+            }
+
+
             if (e.NavigationMode == NavigationMode.Back)//判断是不是按了返回键载入的
             {
                 return;
@@ -133,6 +142,25 @@ namespace FlarumLite.Views.DetailPages
         private void EditTailsButton_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate<EditTailsPage>();
+        }
+        public void AddButtons()
+        {
+            string demoText = "上传";
+
+
+            var demoButton = new ToolbarButton
+            {
+                Icon = new SymbolIcon { Symbol = Symbol.Upload },
+                ToolTip = demoText,
+
+            };
+            demoButton.Click += demoButton_Click;
+            Toolbar.CustomButtons.Add(demoButton);
+
+        }
+        private async void demoButton_Click(object sender, RoutedEventArgs e)
+        {
+            FlarumProxy.UploadFile(discussion);
         }
     }
     public class Reply
