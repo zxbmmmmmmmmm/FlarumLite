@@ -41,8 +41,9 @@ namespace FlarumLite.Views
         {
             if (e.NavigationMode != NavigationMode.Back)//判断是不是按了返回键载入的
             {
-                if(e.Parameter != null)
-                {
+                var notifications = e.Parameter as Notifications;
+                if(notifications != null && notifications.data != null)
+                {                   
                     GetNotifications(e.Parameter as Notifications);
                 }
                 else
