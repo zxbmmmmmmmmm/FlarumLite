@@ -7,10 +7,6 @@ using System.Threading.Tasks;
 
 namespace FlarumLite.core.ViewModels
 {
-    public class Forums
-    {
-        public ObservableCollection<Forum> forums { get; set; }
-    }
     public class Forum
     {
         public string name { get; set; }

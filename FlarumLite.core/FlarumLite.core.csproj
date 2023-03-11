@@ -126,7 +126,7 @@
     <Compile Include="Models\Notifications.cs" />
     <Compile Include="Models\Posts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\Forums.cs" />
+    <Compile Include="Models\Forums.cs" />
     <EmbeddedResource Include="Properties\FlarumLite.core.rd.xml" />
   </ItemGroup>
   <ItemGroup>
