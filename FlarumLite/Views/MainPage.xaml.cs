@@ -85,7 +85,10 @@ namespace FlarumLite.Views
             LoadingProgressBar.Visibility = Visibility.Visible;
             addingData = await FlarumProxy.GetInfo(link);
             var addingPosts = addingData.data;
-
+            if(addingPosts.Count == 0)
+            {
+                new Toast("没有内容").show();
+            }               
             var addingUsers = new ObservableCollection<Included>();
             var addingTags = new ObservableCollection<Included>();
 
