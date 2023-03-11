@@ -1,4 +1,5 @@
 ﻿using ColorCode.Compilation.Languages;
+using FlarentApp.Helpers;
 using FlarumLite.core.Models;
 using FlarumLite.Helpers;
 using FlarumLite.Helpers.ValueConverters;
@@ -103,7 +104,7 @@ namespace FlarumLite.Views.DetailPages
             var addingIncludeds = new ObservableCollection<Included>();
             var addingUsers = new ObservableCollection<Included>();
             var addingDiscussionDetails = new DiscussionDetails();
-            var forum = ApplicationData.Current.LocalSettings.Values["forum"].ToString();
+            var forum = Common.Settings.Forum;
             int num = 15;
             if(Posts != null&&Posts.Count!=0)
             {
@@ -277,7 +278,7 @@ namespace FlarumLite.Views.DetailPages
         private async void MarkDownTextBlock_LinkClicked(object sender, Microsoft.Toolkit.Uwp.UI.Controls.LinkClickedEventArgs e)
         {
             var link = e.Link;
-            var forum = ApplicationData.Current.LocalSettings.Values["forum"].ToString();
+            var forum = Common.Settings.Forum;
             if (link.Contains(forum))//如果是特殊链接（如回复，@等）
             {
                 if (link.Contains($"{forum}/u".ToLower()))
@@ -376,7 +377,7 @@ namespace FlarumLite.Views.DetailPages
 
         private async void OpenInBrowserButton_Click(object sender, RoutedEventArgs e)
         {
-            var forum = ApplicationData.Current.LocalSettings.Values["forum"].ToString();
+            var forum = Common.Settings.Forum;
             await Launcher.LaunchUriAsync(new Uri($"https://{forum}/d/{NavigatingDiscussion}"));
         }
 
@@ -387,7 +388,7 @@ namespace FlarumLite.Views.DetailPages
 
         private async void OpenAPIButton_Click(object sender, RoutedEventArgs e)
         {
-            var forum = ApplicationData.Current.LocalSettings.Values["forum"].ToString();
+            var forum = Common.Settings.Forum;
             await Launcher.LaunchUriAsync(new Uri($"https://{forum}/api/discussions/{DiscussionInfo.id}?bySlug=true&page[near]={PostNumberToLoad}&page[limit]=20"));
         }
 
@@ -408,7 +409,7 @@ namespace FlarumLite.Views.DetailPages
         private void WrapPanelContainer_ItemClick(object sender, ItemClickEventArgs e)
         {
             var clicked = e.ClickedItem as Included;
-            var forum = ApplicationData.Current.LocalSettings.Values["forum"].ToString();
+            var forum = Common.Settings.Forum;
             NavigationService.Navigate<MainPage>($"https://{forum}/api/discussions?&filter[tag]={clicked.attributes.slug}");
         }
 

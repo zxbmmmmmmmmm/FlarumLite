@@ -24,6 +24,7 @@ using Windows.UI.Xaml.Navigation;
 using FlarumLite.Views.Controls;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using Windows.Storage;
+using FlarentApp.Helpers;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
 
@@ -59,7 +60,7 @@ namespace FlarumLite.Views
                 }
                 else
                 {
-                    var forum = ApplicationData.Current.LocalSettings.Values["forum"].ToString();
+                    var forum = Common.Settings.Forum;
                     TargetLink = $"https://{forum}/api/discussions";
                 }
                 GetMainPagePostsData(TargetLink);
@@ -233,7 +234,7 @@ namespace FlarumLite.Views
         {
 
             var clicked = e.ClickedItem as Included;
-            var forum = ApplicationData.Current.LocalSettings.Values["forum"].ToString();
+            var forum = Common.Settings.Forum;
             NavigationService.Navigate<MainPage>($"https://{forum}/api/discussions?&filter[tag]={clicked.attributes.slug}");
             CanNavigate = false;
 

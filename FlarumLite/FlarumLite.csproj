@@ -170,6 +170,7 @@
     <Compile Include="Views\DetailPages\DiscussionDetailPage.xaml.cs">
       <DependentUpon>DiscussionDetailPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MyPages\Common\Settings.cs" />
     <Compile Include="Views\MyPages\EditForumPage.xaml.cs">
       <DependentUpon>EditForumPage.xaml</DependentUpon>
     </Compile>

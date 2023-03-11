@@ -1,4 +1,5 @@
-﻿using FlarumLite.core.Models;
+﻿using FlarentApp.Helpers;
+using FlarumLite.core.Models;
 using FlarumLite.Helpers;
 using FlarumLite.Services;
 using System;
@@ -54,7 +55,7 @@ namespace FlarumLite.Views
         private async void GetCatagories()
         {
             LoadingProgressBar.Visibility = Visibility.Visible;
-            var forum = ApplicationData.Current.LocalSettings.Values["forum"].ToString();
+            var forum = Common.Settings.Forum;
             CatagoriesData = await FlarumProxy.GetCatagories($"https://{forum}/api/tags");
             Catagories = CatagoriesData.data;
             CatagoriesListView.ItemsSource = Catagories;
@@ -69,7 +70,7 @@ namespace FlarumLite.Views
         private void CatagoriesListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             var clicked = e.ClickedItem as Catagory;
-            var forum = ApplicationData.Current.LocalSettings.Values["forum"].ToString();
+            var forum = Common.Settings.Forum;
             NavigationService.Navigate<MainPage>($"https://{forum}/api/discussions?&filter[tag]={clicked.attributes.slug}");
 
         }

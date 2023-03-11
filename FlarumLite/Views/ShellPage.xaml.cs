@@ -1,4 +1,5 @@
-﻿using FlarumLite.core.Models;
+﻿using FlarentApp.Helpers;
+using FlarumLite.core.Models;
 using FlarumLite.Helpers;
 using FlarumLite.Services;
 using System;
@@ -58,7 +59,7 @@ namespace FlarumLite.Views
                 hamburgerMenuControl.SelectedItem = MainItem;
                 hamburgerMenuControl.SelectedIndex = 0;
                 contentFrame.Navigate(MainItem.PageType, true);
-                var forum = ApplicationData.Current.LocalSettings.Values["forum"].ToString();
+                var forum = Common.Settings.Forum;
                 NotificationsData = await FlarumProxy.GetNotifications($"https://{forum}/api/notifications?&page[limit]=25");
 
                 if (NotificationsData.data == null)
@@ -79,7 +80,7 @@ namespace FlarumLite.Views
             MainItem = e.ClickedItem as MenuItem;
             if(MainItem.Name == "我的关注")
             {
-                var forum = ApplicationData.Current.LocalSettings.Values["forum"].ToString();
+                var forum = Common.Settings.Forum;
                 contentFrame.Navigate(MainItem.PageType, $"https://{forum}/api/discussions?&filter[subscription]=following&sort&page%5Boffset%5D=0");
                 NotificationsCountButton.Visibility = Visibility.Visible;
             }

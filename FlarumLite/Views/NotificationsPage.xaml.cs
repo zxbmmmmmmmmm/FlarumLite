@@ -1,4 +1,5 @@
-﻿using FlarumLite.core.Models;
+﻿using FlarentApp.Helpers;
+using FlarumLite.core.Models;
 using FlarumLite.Helpers;
 using FlarumLite.Services;
 using FlarumLite.Views.Controls;
@@ -48,7 +49,7 @@ namespace FlarumLite.Views
                 }
                 else
                 {
-                    var forum = ApplicationData.Current.LocalSettings.Values["forum"].ToString();
+                    var forum = Common.Settings.Forum;
                     var addingNotificationsData = await FlarumProxy.GetNotifications($"https://{forum}/api/notifications?&page[limit]=25");
                     if (addingNotificationsData.data == null)
                     {
@@ -117,7 +118,7 @@ namespace FlarumLite.Views
         private async void NotificationsListView_RefreshRequested(object sender, EventArgs e)
         {
             Notifications.Clear();
-            var forum = ApplicationData.Current.LocalSettings.Values["forum"].ToString();
+            var forum = Common.Settings.Forum;
             var addingNotificationsData = await FlarumProxy.GetNotifications($"https://{forum}/api/notifications?&page[limit]=25");
             if (addingNotificationsData.data == null)
             {

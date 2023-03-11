@@ -1,4 +1,5 @@
-﻿using FlarumLite.core.ViewModels;
+﻿using FlarentApp.Helpers;
+using FlarumLite.core.ViewModels;
 using FlarumLite.Services;
 using FlarumLite.Views.Controls;
 using System;
@@ -32,10 +33,9 @@ namespace FlarumLite.Views.MyPages
         {
             this.InitializeComponent();
             Forums = GetForums();
-            if(ApplicationData.Current.LocalSettings.Values["forum"] != null)
-            {
-                ForumAutoSuggestBox.Text = ApplicationData.Current.LocalSettings.Values["forum"].ToString();
-            }
+
+            ForumAutoSuggestBox.Text = Common.Settings.Forum;
+            
         }
 
         private ObservableCollection<Forum> GetForums()
@@ -64,9 +64,9 @@ namespace FlarumLite.Views.MyPages
         public void EditForum(string website)
         {
             var localsettings = ApplicationData.Current.LocalSettings;
-            localsettings.Values["forum"] = website;
-            localsettings.Values["userId"] = null;
-            localsettings.Values["token"] = "";
+            Common.Settings.Forum = website;
+            Common.Settings.UserId = 0;
+            Common.Settings.Token = "";
             new Toast("更改成功!请刷新页面(需要重新登录)").show();
             NavigationService.GoBack();
         }

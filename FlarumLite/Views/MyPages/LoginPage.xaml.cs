@@ -1,4 +1,5 @@
-﻿using FlarumLite.Helpers;
+﻿using FlarentApp.Helpers;
+using FlarumLite.Helpers;
 using FlarumLite.Services;
 using FlarumLite.Views.Controls;
 using System;
@@ -48,10 +49,10 @@ namespace FlarumLite.Views.MyPages
                     break;
                 case "OK"://登录成功
                     new Toast("登录成功!请刷新当前页面").show();
-                    localSettings.Values["loginName"] = UserNameEntered;
-                    localSettings.Values["loginPassword"] = PasswordEntered;
-                    localSettings.Values["userId"] = loginData.userId;
-                    localSettings.Values["token"] = loginData.token;
+                    Common.Settings.LoginName = UserNameEntered;
+                    Common.Settings.LoginPassword = PasswordEntered;
+                    Common.Settings.UserId = loginData.userId;
+                    Common.Settings.Token = loginData.token;
 
                     Succeed = true;
                     NavigationService.GoBack();

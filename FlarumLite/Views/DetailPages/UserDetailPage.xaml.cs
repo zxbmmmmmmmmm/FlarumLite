@@ -1,4 +1,5 @@
-﻿using FlarumLite.core.Models;
+﻿using FlarentApp.Helpers;
+using FlarumLite.core.Models;
 using FlarumLite.Helpers;
 using FlarumLite.Helpers.ValueConverters;
 using FlarumLite.Services;
@@ -66,7 +67,7 @@ namespace FlarumLite.Views
         {
             LoadingControl.IsLoading = true;
             string uid;
-            var forum = ApplicationData.Current.LocalSettings.Values["forum"].ToString();
+            var forum = Common.Settings.Forum;
             if (NavigatingItem.Contains("[username]"))//通过UserName传输(@)
             {
                 var target = navigatingItem.Replace("[username]", "");
@@ -93,7 +94,7 @@ namespace FlarumLite.Views
             UserDetailsListView.IsEnabled = false;
             if(Links.next == null)
             {
-                var forum = ApplicationData.Current.LocalSettings.Values["forum"].ToString();
+                var forum = Common.Settings.Forum;
                 addingRepliesData = await FlarumProxy.GetInfo($"https://{forum}/api/posts?filter[author]={UserDetails.data.attributes.username}&sort=-createdAt");
             }
             else
@@ -163,7 +164,7 @@ namespace FlarumLite.Views
         private async void MarkDownTextBlock_LinkClicked(object sender, Microsoft.Toolkit.Uwp.UI.Controls.LinkClickedEventArgs e)
         {
             var link = e.Link;
-            var forum = ApplicationData.Current.LocalSettings.Values["forum"].ToString();
+            var forum = Common.Settings.Forum;
 
             if (link.Contains(forum))//如果是特殊链接（如回复，@等）
             {

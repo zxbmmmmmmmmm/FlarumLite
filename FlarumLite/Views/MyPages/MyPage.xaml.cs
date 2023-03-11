@@ -1,4 +1,5 @@
-﻿using FlarumLite.core.Models;
+﻿using FlarentApp.Helpers;
+using FlarumLite.core.Models;
 using FlarumLite.Helpers;
 using FlarumLite.Services;
 using FlarumLite.Views.DetailPages;
@@ -76,11 +77,10 @@ namespace FlarumLite.Views.MyPages
 
         private async void GetMyData()
         {
-            ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-            if (localSettings.Values["userId"] != null)
+            if (Common.Settings.UserId != 0)
             {
-                var userId = localSettings.Values["userId"].ToString();
-                var forum = ApplicationData.Current.LocalSettings.Values["forum"].ToString();
+                var userId = Common.Settings.UserId;
+                var forum = Common.Settings.Forum;
 
                 MyInfo = await FlarumProxy.GetDiscussionDetails($"https://{forum}/api/users/{userId}");
                 SetPageBinding();
