@@ -18,7 +18,7 @@
         <converter:DateConverter x:Key="DateConverter"/>
 
         <DataTemplate x:DataType="models:Included" x:Key="DiscussionDetailsTemlpate">
-            <Border BorderThickness="0,0,0,0.5" Margin="8,0,8,0" BorderBrush="#4D808080" HorizontalAlignment="Stretch">
+            <Border BorderThickness="0,0,0,0.5" Margin="8,0,8,0" BorderBrush="#4D808080" HorizontalAlignment="Stretch"  MaxWidth="1600">
                 <Grid Margin="{StaticResource MediumBottomMargin}" >
                     <!--头像区-->
                     <StackPanel Margin="{StaticResource MediumTopBottomMargin}" HorizontalAlignment="Stretch">
@@ -133,7 +133,7 @@
     <Grid>
         <ListView x:Name="DiscussionDetailsListView" ItemsSource="{x:Bind Posts}" SelectionMode="None" ItemTemplate="{StaticResource DiscussionDetailsTemlpate}">
             <ListView.Header>
-                <Grid>
+                <Grid  MaxWidth="1648">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>

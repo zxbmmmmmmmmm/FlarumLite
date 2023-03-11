@@ -75,7 +75,7 @@ namespace FlarumLite.Views.MyPages
 
         private async void SignUpButton_Click(object sender, RoutedEventArgs e)
         {
-            await Launcher.LaunchUriAsync(new Uri(Common.Settings.Forum));
+            await Launcher.LaunchUriAsync(new Uri($"https://{Common.Settings.Forum}"));
         }
     }
 }

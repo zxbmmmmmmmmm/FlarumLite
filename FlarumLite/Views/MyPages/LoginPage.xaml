@@ -16,13 +16,14 @@
                 Grid.Row="1"
                 Height="220"
                 MinWidth="280"
+                MaxWidth="1024"
                 Margin="24,24,24,24"
                 VerticalAlignment="Top">
                 <StackPanel Margin="{StaticResource SmallLeftRightMargin}">
                     <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="登录" />
                     <AutoSuggestBox
                         x:Name="UserNameAutoSuggestBox"
-                        Margin="{StaticResource SmallTopMargin}"
+                        Margin="{StaticResource SmallTopMargin}"  
                         Header="用户名/邮箱"
                         TextChanged="UserNameAutoSuggestBox_TextChanged" />
                     <PasswordBox
