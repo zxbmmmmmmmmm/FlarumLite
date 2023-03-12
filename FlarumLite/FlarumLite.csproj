@@ -152,6 +152,9 @@
       <DependentUpon>ImageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\PostSourceDialog.xaml.cs" />
+    <Compile Include="Views\Controls\PostTemplate.xaml.cs">
+      <DependentUpon>PostTemplate.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Controls\Toast.xaml.cs">
       <DependentUpon>Toast.xaml</DependentUpon>
     </Compile>
@@ -301,6 +304,10 @@
     <Page Include="Views\Controls\PostSourceDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Controls\PostTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Controls\Toast.xaml">
       <SubType>Designer</SubType>

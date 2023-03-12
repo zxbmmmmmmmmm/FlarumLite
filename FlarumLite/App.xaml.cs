@@ -41,18 +41,10 @@ namespace FlarumLite
             this.InitializeComponent();
             this.UnhandledException += OnAppUnhandledException;
             this.Suspending += OnSuspending;
-            if ("Windows.Mobile" == Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily)
-                Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;//win10m注册返回事件
+            //if ("Windows.Mobile" == Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily)
+                //Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;//win10m注册返回事件
         }
-        private void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
-        {
-            var rootFrame = Window.Current.Content as Frame;
-            if (rootFrame.CanGoBack)
-            {
-                rootFrame.GoBack();
-                e.Handled = true;
-            }
-        }
+
         /// <summary>
         /// 在应用程序由最终用户正常启动时进行调用。
         /// 将在启动应用程序以打开特定文件等情况下使用。
@@ -119,6 +111,7 @@ namespace FlarumLite
         private void BackRequested(object sender, BackRequestedEventArgs e)
         {
             NavigationService.GoBack();
+            e.Handled = true;
         }
         /// <summary>
         /// 导航到特定页失败时调用
