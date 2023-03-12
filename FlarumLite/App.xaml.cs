@@ -3,6 +3,9 @@ using FlarumLite.Services;
 using FlarumLite.Views;
 using FlarumLite.Views.Controls;
 using FlarumLite.Views.MyPages;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
+using Microsoft.AppCenter;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -51,7 +54,9 @@ namespace FlarumLite
         /// </summary>
         /// <param name="e">有关启动请求和过程的详细信息。</param>
         protected override async void OnLaunched(LaunchActivatedEventArgs e)
-        {        
+        {
+            AppCenter.Start("3a90f29f-fc9a-47c5-aea8-2d7407ffb0a0",
+                  typeof(Analytics), typeof(Crashes));
             await FirstRunDisplayService.ShowIfAppropriateAsync();
             Frame rootFrame = Window.Current.Content as Frame;
 
