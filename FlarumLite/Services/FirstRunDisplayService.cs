@@ -25,7 +25,7 @@ namespace FlarumLite.Services
                     {
                         ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
                         localSettings.Values["CloudflareUnderAttackMode"] = false;
-                        localSettings.Values["tails"] = "***\n 本回复来自 *__Flarum Lite__* *{AppVersion}*";
+                        localSettings.Values["tails"] = "***\n 本回复来自 *__Flarent Lite__* *{AppVersion}*";
 
                         localSettings.Values["forum"] = "community.wvbtech.com";
                         localSettings.Values["token"] = "";

@@ -177,8 +177,10 @@ namespace FlarumLite.Views
             if(e.ClickedItem is Datum item)
             {
                 var navigate = new DiscussionNavigationInfo { targetDiscussion = int.Parse(item.id), targetPost = -1 };
-                var page = new DiscussionDetailPage();
-                NavigationService.Navigate<DiscussionDetailPage>(navigate);
+                //var page = new DiscussionDetailPage();
+                //NavigationService.Navigate<DiscussionDetailPage>(navigate);
+                NavigationService.Navigate<DiscussionDetailPageNew>(navigate.targetDiscussion);
+
             }
         }
 

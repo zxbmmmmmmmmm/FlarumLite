@@ -133,6 +133,7 @@
     <Compile Include="Helpers\NavigateHelper.cs" />
     <Compile Include="Helpers\ResourceExtensions.cs" />
     <Compile Include="Helpers\ValueConverters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Helpers\ValueConverters\BoolToVisibilityNegationConverter.cs" />
     <Compile Include="Helpers\ValueConverters\ColorConverters.cs" />
     <Compile Include="Helpers\ValueConverters\CSStoMarkdownConverter.cs" />
     <Compile Include="Helpers\ValueConverters\DateConverter.cs" />
@@ -155,8 +156,17 @@
     <Compile Include="Views\Controls\PostTemplate.xaml.cs">
       <DependentUpon>PostTemplate.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Controls\PostTemplateNew.xaml.cs">
+      <DependentUpon>PostTemplateNew.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\TagTemplate.xaml.cs">
+      <DependentUpon>TagTemplate.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Controls\Toast.xaml.cs">
       <DependentUpon>Toast.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DetailPages\DiscussionDetailPageNew.xaml.cs">
+      <DependentUpon>DiscussionDetailPageNew.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DetailPages\ImageDetailPage.xaml.cs">
       <DependentUpon>ImageDetailPage.xaml</DependentUpon>
@@ -176,7 +186,7 @@
     <Compile Include="Views\DetailPages\DiscussionDetailPage.xaml.cs">
       <DependentUpon>DiscussionDetailPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MyPages\Common\Settings.cs" />
+    <Compile Include="Common\Settings.cs" />
     <Compile Include="Views\MyPages\EditForumPage.xaml.cs">
       <DependentUpon>EditForumPage.xaml</DependentUpon>
     </Compile>
@@ -309,7 +319,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Controls\PostTemplateNew.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\TagTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Controls\Toast.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DetailPages\DiscussionDetailPageNew.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -413,6 +435,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FlarumApi\FlarumApi\FlarumApi.csproj">
+      <Project>{72152b23-0ea3-4214-b17f-21703995b4bc}</Project>
+      <Name>FlarumApi</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FlarumLite.core\FlarumLite.core.csproj">
       <Project>{8BE074B1-67D8-4BB1-9E0C-5ACDAC0CF6DF}</Project>
       <Name>FlarumLite.core</Name>

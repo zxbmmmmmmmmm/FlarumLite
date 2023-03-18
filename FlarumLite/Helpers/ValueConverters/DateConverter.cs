@@ -21,6 +21,8 @@ namespace FlarumLite.Helpers.ValueConverters
             }
             else
             {
+                if (value is DateTime dt)
+                    return FriendFormat(dt);
                 return StringDateTimeFriendFormat(value.ToString());
             }
         }

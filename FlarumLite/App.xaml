@@ -4,7 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:FlarumLite"
     xmlns:converter="using:FlarumLite.Helpers.ValueConverters"
-    xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls">
+    
+    xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Converters">
     <Application.Resources>
 
         <Style x:Key="DetailBodyBaseMediumStyle" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
@@ -63,6 +64,8 @@
         <converter:FontIconConverter x:Key="FontIconConverter"/>
         <converter:IconVisiblityConverter x:Key="IconVisiblityConverter"/>
         <converter:RemoveCSSConverter x:Key="RemoveCSSConverter"/>
+        <converter:BoolToVisibilityNegationConverter x:Key="BoolToVisibilityNegationConverter"/>
+        <toolkit:BoolNegationConverter x:Key="BoolNegationConverter"/>
 
 
 
