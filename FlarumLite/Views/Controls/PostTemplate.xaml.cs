@@ -31,13 +31,18 @@ namespace FlarumLite.Views.Controls
             this.DataContextChanged += (s, e) => Bindings.Update();
         }
 
-        public Datum Post
+        public Included Post
         {
-            get { return (Datum)GetValue(PostProperty); }
+            get { return (Included)GetValue(PostProperty); }
             set { SetValue(PostProperty, value); }
         }
         public static readonly DependencyProperty PostProperty =
-           DependencyProperty.Register("Post", typeof(Datum), typeof(PostTemplate), new PropertyMetadata(new Datum()));
+           DependencyProperty.Register("Post", typeof(Included), typeof(PostTemplate), new PropertyMetadata(new Included()));
+
+        public DiscussionDetailPage DetailPage
+        {
+            get => NavigationService.Frame.Content as DiscussionDetailPage;
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private async void ViewSourceButton_Click(object sender, RoutedEventArgs e)
@@ -104,16 +109,17 @@ namespace FlarumLite.Views.Controls
                     {
                         postNumber = int.Parse(split[place + 2]);
                     }
-                   
-                    //if (discussionNumber.ToString() == NavigatingDiscussion)
-                    //{
-
-                    //}
-                    //else
-                    //{
-                        //var navigate = new DiscussionNavigationInfo { targetDiscussion = discussionNumber, targetPost = postNumber };
-                        //NavigationService.Navigate<DiscussionDetailPage>(navigate);
-                    //}
+                    if (discussionNumber.ToString() == DetailPage.NavigatingDiscussion)
+                    {
+                        var items = DetailPage.DiscussionDetailsListView.Items;
+                        var selected = items.First(p => (p as Included).attributes.number == postNumber);
+                        DetailPage.DiscussionDetailsListView.ScrollIntoView(selected);
+                    }
+                    else
+                    {
+                        var navigate = new DiscussionNavigationInfo { targetDiscussion = discussionNumber, targetPost = postNumber };
+                        NavigationService.Navigate<DiscussionDetailPage>(navigate);
+                    }
                 }
             }
             else
@@ -133,10 +139,10 @@ namespace FlarumLite.Views.Controls
             var id = data.id;
             var user = data.attributes.user.displayName;
             string text = $"@\"{user}\"#p{id} ";
-            //string discussionName = DiscussionInfo.attributes.title;
-            //string[] navigate = { NavigatingDiscussion, discussionName, text };
+            string discussionName = DetailPage.DiscussionInfo.attributes.title;
+            string[] navigate = { DetailPage.NavigatingDiscussion, discussionName, text };
 
-            //NavigationService.Navigate<ReplyPage>(navigate);
+            NavigationService.Navigate<ReplyPage>(navigate);
         }
     }
 }
