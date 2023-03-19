@@ -30,7 +30,7 @@ namespace FlarumLite.Helpers
             client.DefaultRequestHeaders.Add("user-agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0");//模拟浏览器
             client.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
             client.DefaultRequestHeaders.Add("Keep-Alive", "timeout=600");
-            var token = Common.Settings.Forum;
+            var token = Common.Settings.Token;
             client.DefaultRequestHeaders.Add("Authorization", "Token " + token);
 
 
@@ -49,7 +49,7 @@ namespace FlarumLite.Helpers
             client.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
             client.DefaultRequestHeaders.Add("Keep-Alive", "timeout=600");
 
-            var token = Common.Settings.Forum;
+            var token = Common.Settings.Token;
             client.DefaultRequestHeaders.Add("Authorization", "Token " + token);
 
             var response = await client.GetAsync(new Uri(link));
@@ -67,7 +67,7 @@ namespace FlarumLite.Helpers
             client.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
             client.DefaultRequestHeaders.Add("Keep-Alive", "timeout=600");
 
-            var token = Common.Settings.Forum;
+            var token = Common.Settings.Token;
             client.DefaultRequestHeaders.Add("Authorization", "Token " + token);
 
 
@@ -100,7 +100,7 @@ namespace FlarumLite.Helpers
             client.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
             client.DefaultRequestHeaders.Add("Keep-Alive", "timeout=600");
 
-            var token = Common.Settings.Forum;
+            var token = Common.Settings.Token;
             client.DefaultRequestHeaders.Add("Authorization", "Token " + token);
 
             var response = await client.GetAsync(new Uri(link));
@@ -117,7 +117,7 @@ namespace FlarumLite.Helpers
             client.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
             client.DefaultRequestHeaders.Add("Keep-Alive", "timeout=600");
 
-            var token = Common.Settings.Forum;
+            var token = Common.Settings.Token;
             client.DefaultRequestHeaders.Add("Authorization", "Token " + token);
 
             var response = await client.GetAsync(new Uri(link));
@@ -164,7 +164,7 @@ namespace FlarumLite.Helpers
             client.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
             client.DefaultRequestHeaders.Add("Keep-Alive", "timeout=600");
 
-            var token = Common.Settings.Forum;
+            var token = Common.Settings.Token;
             client.DefaultRequestHeaders.Add("Authorization", "Token " + token);
 
             var datum = new ReplyData{ data = new Reply { type = "posts", attributes = new ReplyAttributes { content = text }, relationships = new Relationships { discussion = new Discussion { data = new Data { id = discussion } } } } };
@@ -202,7 +202,7 @@ namespace FlarumLite.Helpers
             if(file != null)
             {
                 var client = new HttpClient();
-                var token = Common.Settings.Forum;
+                var token = Common.Settings.Token;
                 client.DefaultRequestHeaders.Add("Authorization", "Token " + token);
                 var forum = Common.Settings.Forum;
                 client.DefaultRequestHeaders.Add("user-agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0");
