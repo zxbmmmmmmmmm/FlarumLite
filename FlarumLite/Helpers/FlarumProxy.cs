@@ -18,6 +18,8 @@ using FlarumLite.Views.DetailPages;
 using Windows.Storage.Streams;
 using System.Diagnostics;
 using FlarentApp.Helpers;
+using FlarumApi.Models;
+using Newtonsoft.Json;
 
 namespace FlarumLite.Helpers
 {
@@ -167,16 +169,34 @@ namespace FlarumLite.Helpers
             var token = Common.Settings.Token;
             client.DefaultRequestHeaders.Add("Authorization", "Token " + token);
 
-            var datum = new ReplyData{ data = new Reply { type = "posts", attributes = new ReplyAttributes { content = text }, relationships = new Relationships { discussion = new Discussion { data = new Data { id = discussion } } } } };
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(datum);
-
-            var values = new Dictionary<string, string>
+            var contents = new Dictionary<string, object>
             {
-                { "data", getJsonByObject(datum) },
+                {"data",new Dictionary<string,object>
+                {
+                    {"type","posts" },
+                    {"attributes",new Dictionary<string,string>
+                    {
+                        {"content",text }
+                    }
+                    },
+                    {"relationships",new Dictionary<string,object>
+                    {
+                        {"discussion",new Dictionary<string,object>
+                        {
+                            { "data",new Dictionary<string,string>
+                            {
+                                {"type","discussions" },
+                                {"id",discussion.ToString() }
+                            }
+                            }
+                        }
+                        }
+                    }
+                    }
+                }
+                }
             };
-
-            var content = new FormUrlEncodedContent((IEnumerable<KeyValuePair<string, string>>)values);
-
+            var json = JsonConvert.SerializeObject(contents, Formatting.None);
             var forum = Common.Settings.Forum;
             var response = await client.PostAsync($"https://{forum}/api/posts", new StringContent(json, System.Text.Encoding.UTF8, "application/json"));
             var code = response.StatusCode;
