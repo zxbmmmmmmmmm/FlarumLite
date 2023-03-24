@@ -21,6 +21,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Microsoft.Toolkit.Uwp.UI;
+using FlarumLite.Helpers;
+using Newtonsoft.Json.Linq;
 
 
 //https://go.microsoft.com/fwlink/?LinkId=234236 上介绍了“用户控件”项模板
@@ -53,8 +55,8 @@ namespace FlarumLite.Views.Controls
         {
 
             var item = sender as MenuFlyoutItem;
-            var html = (item.DataContext as Included).attributes.contentHtml;
-            var md = (item.DataContext as Included).attributes.contentMD;
+            var html = (item.DataContext as Post).ContentHtml;
+            var md = CSStoMarkdown.HTMLtoMarkdown((item.DataContext as Post).ContentHtml);
 
             var dialog = new PostSourceDialog(md, html);
             await dialog.ShowAsync();
@@ -63,10 +65,10 @@ namespace FlarumLite.Views.Controls
         private void UserButton_Click(object sender, RoutedEventArgs e)
         {
             var btn = sender as HyperlinkButton;
-            var clicked = btn.DataContext as FlarumApi.Models.User;
-            if (clicked.Id != 0)
+            var clicked = btn.DataContext as FlarumApi.Models.Post;
+            if (clicked.User.Id != 0)
             {
-                NavigationService.Navigate<UserDetailPage>(clicked.Id.ToString());
+                NavigationService.Navigate<UserDetailPage>(clicked.User.Id.ToString());
 
             }
         }
