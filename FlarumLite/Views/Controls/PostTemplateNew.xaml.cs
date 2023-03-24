@@ -63,10 +63,10 @@ namespace FlarumLite.Views.Controls
         private void UserButton_Click(object sender, RoutedEventArgs e)
         {
             var btn = sender as HyperlinkButton;
-            var clicked = btn.DataContext as Included;
-            if (clicked.relationships.user.data.id != "0")
+            var clicked = btn.DataContext as FlarumApi.Models.User;
+            if (clicked.Id != 0)
             {
-                NavigationService.Navigate<UserDetailPage>(clicked.relationships.user.data.id);
+                NavigationService.Navigate<UserDetailPage>(clicked.Id.ToString());
 
             }
         }
