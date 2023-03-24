@@ -1,4 +1,5 @@
 ﻿using FlarentApp.Helpers;
+using FlarumApi;
 using FlarumLite.core.Models;
 using FlarumLite.Helpers;
 using FlarumLite.Helpers.ValueConverters;
@@ -71,8 +72,8 @@ namespace FlarumLite.Views
             if (NavigatingItem.Contains("[username]"))//通过UserName传输(@)
             {
                 var target = navigatingItem.Replace("[username]", "");
-                var user = await FlarumProxy.GetInfo($"https://{forum}/api/users?filter[q]={target}");//获取UID
-                uid = user.data[0].id;
+                var user = await FlarumApiProviders.GetUser($"https://{forum}/api/users/{target}?bySlug=true",Common.Settings.Token);//获取UID
+                uid = user.Id.ToString();
             }
             else
             {
