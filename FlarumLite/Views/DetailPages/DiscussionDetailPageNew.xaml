@@ -151,6 +151,7 @@
                             <Button.Flyout>
                                 <MenuFlyout>
                                     <MenuFlyoutItem x:Name="RefreshItem" Click="RefreshItem_Click"  Text="刷新"/>
+                                    <MenuFlyoutItem x:Name="DownloadItem" Click="DownloadItem_Click"  Text="下载"/>
 
                                 </MenuFlyout>
                             </Button.Flyout>

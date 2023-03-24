@@ -2,6 +2,7 @@
 using FlarumApi;
 using FlarumApi.Models;
 using FlarumLite.Services;
+using FlarumLite.Views.Dialogs;
 using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
@@ -253,7 +254,8 @@ namespace FlarumLite.Views.DetailPages
 
         private async void DownloadItem_Click(object sender, RoutedEventArgs e)
         {
-            var tuple = new Tuple<List<int>, Discussion>(PostIds, Discussion);
+            var dialog = new DownloadDialog(PostIds, Discussion);
+            await dialog.ShowAsync();
         }
         public async void TurnToLastPage()
         {
@@ -286,6 +288,11 @@ namespace FlarumLite.Views.DetailPages
         {
             await TurnToPage(int.Parse(sender.Text) - 1);
             sender.Text = "";
+        }
+
+        private void DownloadItem_Click_1(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

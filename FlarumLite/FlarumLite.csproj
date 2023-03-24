@@ -182,6 +182,9 @@
     <Compile Include="Views\Controls\LoginAgainInAppNotification.xaml.cs">
       <DependentUpon>LoginAgainInAppNotification.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Dialogs\DownloadDialog.xaml.cs">
+      <DependentUpon>DownloadDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Dialogs\FirstRunDialog.xaml.cs">
       <DependentUpon>FirstRunDialog.xaml</DependentUpon>
     </Compile>
@@ -350,6 +353,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Controls\LoginAgainInAppNotification.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\DownloadDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
