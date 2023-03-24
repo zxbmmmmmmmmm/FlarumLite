@@ -17,7 +17,7 @@
             <TextBlock Text="下载" Style="{StaticResource SubtitleTextBlockStyle}" VerticalAlignment="Center"/>
         </StackPanel>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
-            <Button x:Name="CancelButton" Style="{StaticResource CommandBarFlyoutEllipsisButtonStyle}" Click="CancelButton_Click">
+            <Button x:Name="CancelButton"  Click="CancelButton_Click" Background="Transparent" BorderBrush="Transparent">
                 <FontIcon Glyph="&#xE10A;"/>
             </Button>
         </StackPanel>
